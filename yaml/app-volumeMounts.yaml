@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: gcr.io/kuar-demo/kuard-amd64:1
+      volumeMounts:
+        - name: my-data
+          mountPath: /data
+      ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      readinessProbe:
+        httpGet:
+          path: /readiness
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+  volumes:
+    - name: my-data
+      emptyDir: {}
